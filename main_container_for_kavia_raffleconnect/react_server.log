@@ -19,3 +19,13 @@ To create a production build, use npm run build.
 
 webpack compiled successfully
 Compiling...
+Failed to compile.
+
+Attempted import error: 'prizeCategories' is not exported from '../data/prizes' (imported as 'prizeCategories').
+ERROR in ./src/components/PrizeShowcase.js 69:16-35
+export 'prizeCategories' (imported as 'prizeCategories') was not found in '../data/prizes' (possible exports: default)
+
+webpack compiled with 1 error
+Compiling...
+Compiled successfully!
+webpack compiled successfully

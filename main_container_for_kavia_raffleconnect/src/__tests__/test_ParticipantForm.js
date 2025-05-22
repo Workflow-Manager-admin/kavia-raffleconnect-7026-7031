@@ -150,11 +150,31 @@ describe('ParticipantForm Component', () => {
       interests: ['ai'] 
     });
     
+    // Update our mock state to reflect the new interest selection
+    useRaffle.mockReturnValue({
+      state: {
+        ...mockState,
+        participantData: {
+          ...mockState.participantData,
+          interests: ['ai']
+        }
+      },
+      actions: mockActions
+    });
+    
+    // Re-render with updated state
+    render(<ParticipantForm />);
+    
     // Select another interest
     const mlCheckbox = screen.getByLabelText('Machine Learning');
     fireEvent.click(mlCheckbox);
     
-    // The mock will have set the new state, so let's update our mock to simulate this
+    // Check that the second interest was added
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
+      interests: ['ai', 'ml'] 
+    });
+    
+    // Update our mock state again
     useRaffle.mockReturnValue({
       state: {
         ...mockState,
@@ -166,12 +186,16 @@ describe('ParticipantForm Component', () => {
       actions: mockActions
     });
     
-    // Now uncheck the first checkbox
-    fireEvent.click(aiCheckbox);
+    // Re-render with updated state
+    render(<ParticipantForm />);
     
-    // Check if updateParticipantData was called with the updated interests array
+    // Now uncheck the first checkbox
+    const updatedAiCheckbox = screen.getByLabelText('Artificial Intelligence');
+    fireEvent.click(updatedAiCheckbox);
+    
+    // Check if updateParticipantData was called with only 'ml' in the interests array
     expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
-      interests: [] 
+      interests: ['ml'] 
     });
   });
 

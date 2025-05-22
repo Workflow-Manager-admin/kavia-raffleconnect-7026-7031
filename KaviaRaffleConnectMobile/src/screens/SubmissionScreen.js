@@ -206,21 +206,21 @@ const styles = StyleSheet.create({
     padding: spacing.medium,
   },
   prizeName: {
-    fontSize: typography.fontSize.body,
-    fontWeight: typography.fontWeight.bold,
+    fontSize: 14,
+    fontWeight: '700',
     color: colors.textColor,
     marginBottom: spacing.small,
   },
   prizeValue: {
-    fontSize: typography.fontSize.body,
-    fontWeight: typography.fontWeight.medium,
+    fontSize: 14,
+    fontWeight: '500',
     color: colors.kaviaOrange,
   },
   termsContainer: {
     marginBottom: spacing.large,
   },
   termsText: {
-    fontSize: typography.fontSize.small,
+    fontSize: 12,
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 18,

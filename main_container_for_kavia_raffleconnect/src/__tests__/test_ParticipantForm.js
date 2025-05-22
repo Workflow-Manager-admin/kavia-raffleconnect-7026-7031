@@ -70,7 +70,7 @@ describe('ParticipantForm Component', () => {
     render(<ParticipantForm />);
     
     // Submit the form without filling any fields
-    fireEvent.click(screen.getByRole('button', { name: /Continue to Prize Selection/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Continue to View Prizes/i }));
     
     // Check that validation was triggered with form validation
     expect(mockActions.setErrors).toHaveBeenCalled();

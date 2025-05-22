@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.large,
   },
   sectionTitle: {
-    fontSize: typography.fontSize.large,
-    fontWeight: typography.fontWeight.bold,
+    fontSize: 18,
+    fontWeight: '700',
     color: colors.textColor,
     marginBottom: spacing.medium,
   },

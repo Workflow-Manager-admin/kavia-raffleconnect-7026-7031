@@ -109,27 +109,32 @@ describe('ParticipantForm Component', () => {
     expect(mockActions.nextStep).not.toHaveBeenCalled();
   });
 
-  test('handles input field changes correctly', async () => {
+  test('handles input field changes correctly', () => {
+    // Setup with errors to test clearErrors
+    useRaffle.mockReturnValue({
+      state: {
+        ...mockState,
+        errors: { firstName: 'Error' } // Add an error to trigger clearErrors
+      },
+      actions: mockActions
+    });
+    
     render(<ParticipantForm />);
     
-    // Interact with text fields
+    // Interact with a text field
     const firstNameInput = screen.getByLabelText(/First Name/i);
-    await userEvent.type(firstNameInput, 'John');
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
     
+    // Check if updateParticipantData was called with the correct value
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'John' });
+    
+    // Test email field
     const emailInput = screen.getByLabelText(/Email Address/i);
-    await userEvent.type(emailInput, 'john@example.com');
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
     
-    // Check if updateParticipantData was called with correct values
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'J' });
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'o' });
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'h' });
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'n' });
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ email: 'john@example.com' });
     
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ email: 'j' });
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ email: 'o' });
-    // (and so on for each character)
-    
-    // Verify that clearErrors was called due to input changes
+    // Now clearErrors should be called because we have errors and made changes
     expect(mockActions.clearErrors).toHaveBeenCalled();
   });
 

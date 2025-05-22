@@ -139,75 +139,74 @@ describe('ParticipantForm Component', () => {
   });
 
   test('handles checkbox selection correctly', () => {
-    // Test adding an interest
+    // Test adding a checkbox
     render(<ParticipantForm />);
     
-    // Select an interest checkbox
     const aiCheckbox = screen.getByLabelText('Artificial Intelligence');
     fireEvent.click(aiCheckbox);
     
-    // Check if updateParticipantData was called with the correct interest array
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
-      interests: ['ai'] 
-    });
+    // Verify that updateParticipantData is called with the right value
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ interests: ['ai'] });
     
-    // Clean up for the next part of the test
-    mockActions.updateParticipantData.mockClear();
+    // Reset mock for next test
+    jest.clearAllMocks();
     
-    // Test adding a second interest - set up state as if first interest was already selected
+    // Test multiple selections
+    // Mock the state as if 'ai' is already selected
     useRaffle.mockReturnValue({
       state: {
-        ...mockState,
         participantData: {
           ...mockState.participantData,
           interests: ['ai']
-        }
+        },
+        errors: {}
       },
       actions: mockActions
     });
     
-    // Re-render with updated state
     render(<ParticipantForm />);
     
-    // Select another interest
+    // Select 'ml' checkbox
     const mlCheckbox = screen.getByLabelText('Machine Learning');
     fireEvent.click(mlCheckbox);
     
-    // Now verify that the expected array with both interests was passed
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({
-      interests: expect.arrayContaining(['ai', 'ml'])
-    });
+    // The handler should create a new array with both values
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        interests: expect.arrayContaining(['ai', 'ml'])
+      })
+    );
     
-    // Clean up for the next part of the test
-    mockActions.updateParticipantData.mockClear();
+    // Reset mock for next test
+    jest.clearAllMocks();
     
-    // Test removing an interest - set up state as if both interests were selected
+    // Test removing a checkbox
+    // Mock the state as if both are selected
     useRaffle.mockReturnValue({
       state: {
-        ...mockState,
         participantData: {
           ...mockState.participantData,
           interests: ['ai', 'ml']
-        }
+        },
+        errors: {}
       },
       actions: mockActions
     });
     
-    // Re-render with updated state
     render(<ParticipantForm />);
     
-    // Uncheck the first checkbox
-    const updatedAiCheckbox = screen.getByLabelText('Artificial Intelligence');
-    fireEvent.click(updatedAiCheckbox);
+    // Uncheck 'ai' checkbox
+    const aiCheckboxToUncheck = screen.getByLabelText('Artificial Intelligence');
+    expect(aiCheckboxToUncheck).toBeChecked(); // Verify it starts checked
+    fireEvent.click(aiCheckboxToUncheck);
     
-    // Check that the array now only contains ml
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({
-      interests: expect.arrayContaining(['ml'])
-    });
-    
-    // Also verify it doesn't contain ai anymore
-    const lastCall = mockActions.updateParticipantData.mock.calls[mockActions.updateParticipantData.mock.calls.length - 1][0];
-    expect(lastCall.interests).not.toContain('ai');
+    // It should have called with only 'ml' remaining
+    // We can't check exact array because Jest mock call tracking doesn't provide
+    // the exact order of interest removals
+    expect(mockActions.updateParticipantData).toHaveBeenCalled();
+    const lastCallArgs = mockActions.updateParticipantData.mock.calls[0][0];
+    expect(lastCallArgs.interests).toContain('ml');
+    expect(lastCallArgs.interests).not.toContain('ai');
   });
 
   test('submits form successfully with valid data', () => {

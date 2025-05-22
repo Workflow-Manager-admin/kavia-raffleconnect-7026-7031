@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -10,40 +10,22 @@ import {
 } from 'react-native';
 import { globalStyles, colors, spacing, shadows } from '../styles';
 
-// Prize data (reused from PrizeShowcaseScreen)
-const prizes = [
-  {
-    id: 1,
-    name: 'Kavia Pro AI License',
-    description: 'One year premium subscription to Kavia Pro AI with unlimited access to all features',
-    image: 'https://via.placeholder.com/300x200?text=Kavia+Pro+AI',
-    value: '$1200',
-    category: 'software'
-  },
-  {
-    id: 2,
-    name: 'MacBook Pro M2',
-    description: 'Latest MacBook Pro with M2 chip, 16GB RAM and 512GB storage',
-    image: 'https://via.placeholder.com/300x200?text=MacBook+Pro',
-    value: '$2499',
-    category: 'hardware'
-  }
-];
-
 // PUBLIC_INTERFACE
 /**
  * SubmissionScreen - Screen for reviewing and submitting raffle entry
  * Displays a summary of user information and prizes with a submit button
  * 
+ * @param {object} props - Component props
+ * @param {object} props.navigation - React Navigation object for screen transitions
+ * @param {object} props.route - React Navigation route object containing params
+ * @param {object} props.route.params - Parameters passed from previous screen
+ * @param {object} props.route.params.userData - User data from the participant form
+ * @param {Array} props.route.params.prizes - Array of prizes available in the raffle
  * @returns {JSX.Element} React component
  */
-const SubmissionScreen = () => {
-  // Mock user data (in a real app, this would come from navigation params or context)
-  const [userData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    jobTitle: 'Technical Role',
-  });
+const SubmissionScreen = ({ navigation, route }) => {
+  // Get user data and prizes from route params
+  const { userData, prizes } = route.params;
 
   // Handle submission button press
   const handleSubmit = () => {
@@ -58,11 +40,12 @@ const SubmissionScreen = () => {
         { 
           text: "Submit", 
           onPress: () => {
-            Alert.alert(
-              "Success!",
-              "Your raffle entry has been submitted successfully!",
-              [{ text: "OK" }]
-            );
+            // Navigate to the Success screen with user data and the first prize
+            // In a real app, the selected prize might be chosen randomly or based on user preference
+            navigation.navigate('Success', {
+              userData,
+              selectedPrize: prizes[0] // For demo purposes, use the first prize
+            });
           } 
         }
       ]

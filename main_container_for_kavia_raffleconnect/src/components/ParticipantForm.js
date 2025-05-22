@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './ParticipantForm.css';
 import { useRaffle } from '../contexts/RaffleContext';
-import { validateParticipantData, interestOptions } from '../utils/validation';
+import { validateParticipantData, interestOptions, jobTitleOptions } from '../utils/validation';
 
 // PUBLIC_INTERFACE
 /**

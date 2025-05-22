@@ -167,7 +167,7 @@ const ParticipantForm = () => {
         
         <div className="form-actions">
           <button type="submit" className="btn btn-primary">
-            Continue to Prize Selection
+            Continue to View Prizes
           </button>
         </div>
       </form>

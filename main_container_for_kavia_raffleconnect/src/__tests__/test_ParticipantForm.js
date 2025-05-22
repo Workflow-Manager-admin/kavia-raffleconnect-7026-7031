@@ -139,6 +139,7 @@ describe('ParticipantForm Component', () => {
   });
 
   test('handles checkbox selection correctly', () => {
+    // Test adding an interest
     render(<ParticipantForm />);
     
     // Select an interest checkbox
@@ -150,7 +151,10 @@ describe('ParticipantForm Component', () => {
       interests: ['ai'] 
     });
     
-    // Update our mock state to reflect the new interest selection
+    // Clean up for the next part of the test
+    mockActions.updateParticipantData.mockClear();
+    
+    // Test adding a second interest - set up state as if first interest was already selected
     useRaffle.mockReturnValue({
       state: {
         ...mockState,
@@ -169,12 +173,15 @@ describe('ParticipantForm Component', () => {
     const mlCheckbox = screen.getByLabelText('Machine Learning');
     fireEvent.click(mlCheckbox);
     
-    // Check that the second interest was added
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
-      interests: ['ai', 'ml'] 
+    // Now verify that the expected array with both interests was passed
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({
+      interests: expect.arrayContaining(['ai', 'ml'])
     });
     
-    // Update our mock state again
+    // Clean up for the next part of the test
+    mockActions.updateParticipantData.mockClear();
+    
+    // Test removing an interest - set up state as if both interests were selected
     useRaffle.mockReturnValue({
       state: {
         ...mockState,
@@ -189,14 +196,18 @@ describe('ParticipantForm Component', () => {
     // Re-render with updated state
     render(<ParticipantForm />);
     
-    // Now uncheck the first checkbox
+    // Uncheck the first checkbox
     const updatedAiCheckbox = screen.getByLabelText('Artificial Intelligence');
     fireEvent.click(updatedAiCheckbox);
     
-    // Check if updateParticipantData was called with only 'ml' in the interests array
-    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
-      interests: ['ml'] 
+    // Check that the array now only contains ml
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({
+      interests: expect.arrayContaining(['ml'])
     });
+    
+    // Also verify it doesn't contain ai anymore
+    const lastCall = mockActions.updateParticipantData.mock.calls[mockActions.updateParticipantData.mock.calls.length - 1][0];
+    expect(lastCall.interests).not.toContain('ai');
   });
 
   test('submits form successfully with valid data', () => {

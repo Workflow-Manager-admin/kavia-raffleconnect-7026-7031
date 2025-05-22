@@ -7,10 +7,19 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  View,
 } from 'react-native';
-import { ParticipantFormScreen } from './src/screens';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { 
+  ParticipantFormScreen, 
+  PrizeShowcaseScreen, 
+  SubmissionScreen, 
+  SuccessScreen 
+} from './src/screens';
 import { colors } from './src/styles';
+
+// Create the stack navigator
+const Stack = createStackNavigator();
 
 function App(): React.JSX.Element {
   return (
@@ -19,9 +28,32 @@ function App(): React.JSX.Element {
         barStyle="light-content"
         backgroundColor={colors.kaviaDark}
       />
-      <View style={styles.content}>
-        <ParticipantFormScreen />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="ParticipantForm"
+          screenOptions={{
+            headerShown: false,
+            cardStyle: { backgroundColor: colors.kaviaDark },
+          }}
+        >
+          <Stack.Screen 
+            name="ParticipantForm" 
+            component={ParticipantFormScreen} 
+          />
+          <Stack.Screen 
+            name="PrizeShowcase" 
+            component={PrizeShowcaseScreen} 
+          />
+          <Stack.Screen 
+            name="Submission" 
+            component={SubmissionScreen} 
+          />
+          <Stack.Screen 
+            name="Success" 
+            component={SuccessScreen} 
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   );
 }
@@ -30,9 +62,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.kaviaDark,
-  },
-  content: {
-    flex: 1,
   },
 });
 

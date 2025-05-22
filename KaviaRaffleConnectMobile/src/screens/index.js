@@ -8,3 +8,4 @@
 export { default as ParticipantFormScreen } from './ParticipantFormScreen';
 export { default as PrizeShowcaseScreen } from './PrizeShowcaseScreen';
 export { default as SubmissionScreen } from './SubmissionScreen';
+export { default as SuccessScreen } from './SuccessScreen';

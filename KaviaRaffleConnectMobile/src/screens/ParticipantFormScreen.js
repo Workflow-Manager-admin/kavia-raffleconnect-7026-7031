@@ -17,9 +17,11 @@ import { globalStyles, colors, spacing } from '../styles';
  * ParticipantFormScreen - Screen for collecting participant information
  * Includes form fields for Name, Email, and Job Title with validation
  * 
+ * @param {object} props - Component props including navigation
+ * @param {object} props.navigation - React Navigation object for screen transitions
  * @returns {JSX.Element} React component
  */
-const ParticipantFormScreen = () => {
+const ParticipantFormScreen = ({ navigation }) => {
   // Form state
   const [formData, setFormData] = useState({
     name: '',
@@ -103,13 +105,8 @@ const ParticipantFormScreen = () => {
   // Form submission handler
   const handleSubmit = () => {
     if (validateForm()) {
-      // In a real app, this would navigate to the next screen or submit data
-      Alert.alert(
-        "Form Submitted",
-        "Your information has been successfully submitted.",
-        [{ text: "OK" }]
-      );
-      console.log('Form data:', formData);
+      // Navigate to PrizeShowcase screen and pass user data
+      navigation.navigate('PrizeShowcase', { userData: formData });
     } else {
       // Show error message
       Alert.alert(

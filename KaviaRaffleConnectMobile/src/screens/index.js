@@ -5,6 +5,4 @@
  * As screens are added, export them from this file for easy imports
  */
 
-// Example:
-// export { default as HomeScreen } from './HomeScreen';
-// export { default as ProfileScreen } from './ProfileScreen';
+export { default as ParticipantFormScreen } from './ParticipantFormScreen';

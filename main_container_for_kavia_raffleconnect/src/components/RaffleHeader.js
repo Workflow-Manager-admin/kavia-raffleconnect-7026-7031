@@ -40,7 +40,7 @@ const RaffleHeader = () => {
               </div>
               <div className="step-label">
                 {step === 'info' && 'Your Info'}
-                {step === 'prizes' && 'Select Prize'}
+                {step === 'prizes' && 'View Prizes'}
                 {step === 'submit' && 'Submit'}
                 {step === 'success' && 'Complete'}
               </div>

@@ -63,7 +63,7 @@ describe('ParticipantForm Component', () => {
     });
 
     // Check if submit button is rendered
-    expect(screen.getByRole('button', { name: /Continue to Prize Selection/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Continue to View Prizes/i })).toBeInTheDocument();
   });
 
   test('displays validation errors for empty fields on submit', () => {

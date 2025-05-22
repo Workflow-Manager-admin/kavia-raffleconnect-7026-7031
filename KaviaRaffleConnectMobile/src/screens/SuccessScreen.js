@@ -16,29 +16,21 @@ import { globalStyles, colors, spacing, shadows } from '../styles';
  * SuccessScreen - Final screen displayed after successful raffle entry
  * Shows a congratulatory message, animated success icon, and entry summary
  * 
+ * @param {object} props - Component props
+ * @param {object} props.navigation - React Navigation object for screen transitions
+ * @param {object} props.route - React Navigation route object containing params
+ * @param {object} props.route.params - Parameters passed from previous screen
+ * @param {object} props.route.params.userData - User data from the participant form
+ * @param {object} props.route.params.selectedPrize - The selected prize for the raffle
  * @returns {JSX.Element} React component
  */
-const SuccessScreen = () => {
+const SuccessScreen = ({ navigation, route }) => {
   // Animation values
   const scaleAnim = useState(new Animated.Value(0))[0];
   const opacityAnim = useState(new Animated.Value(0))[0];
   
-  // Mock user data and prize info
-  // In a real app, this would come from navigation params or context
-  const [userData] = useState({
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    jobTitle: 'Technical Role',
-  });
-
-  const [selectedPrize] = useState({
-    id: 1,
-    name: 'Kavia Pro AI License',
-    description: 'One year premium subscription to Kavia Pro AI with unlimited access to all features',
-    image: 'https://via.placeholder.com/300x200?text=Kavia+Pro+AI',
-    value: '$1200',
-    category: 'software'
-  });
+  // Get user data and selected prize from route params
+  const { userData, selectedPrize } = route.params;
 
   // Run animations when component mounts
   useEffect(() => {
@@ -60,15 +52,17 @@ const SuccessScreen = () => {
 
   // Handle "Enter Another Raffle" button press
   const handleEnterAnother = () => {
-    // In a real app, this would navigate to the first screen
-    // or reset the state/navigation stack
-    console.log('Enter another raffle pressed');
+    // Navigate back to the ParticipantFormScreen by resetting the form
+    navigation.navigate('ParticipantForm');
   };
 
   // Handle "Return Home" button press
   const handleReturnHome = () => {
-    // In a real app, this would navigate to the home screen
-    console.log('Return home pressed');
+    // Navigate to the first screen and reset the navigation stack
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'ParticipantForm' }],
+    });
   };
 
   // Render an information field with label and value

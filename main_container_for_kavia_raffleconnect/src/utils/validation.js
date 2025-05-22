@@ -70,3 +70,13 @@ export const interestOptions = [
   { id: 'product', label: 'Product Management' },
   { id: 'design', label: 'UX/UI Design' }
 ];
+
+// Available job title options for the form
+export const jobTitleOptions = [
+  { value: 'Executive Level', label: 'Executive Level' },
+  { value: 'Manager', label: 'Manager' },
+  { value: 'Technical Role', label: 'Technical Role' },
+  { value: 'Self-Employed', label: 'Self-Employed' },
+  { value: 'Student', label: 'Student' },
+  { value: 'Other', label: 'Other' }
+];

@@ -1,0 +1,242 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
+import ParticipantForm from '../components/ParticipantForm';
+import { useRaffle } from '../contexts/RaffleContext';
+import { interestOptions } from '../utils/validation';
+
+// Mock the context hook
+jest.mock('../contexts/RaffleContext');
+
+describe('ParticipantForm Component', () => {
+  // Default mock state and actions
+  const mockState = {
+    participantData: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      company: '',
+      title: '',
+      interests: []
+    },
+    errors: {}
+  };
+  
+  const mockActions = {
+    updateParticipantData: jest.fn(),
+    setErrors: jest.fn(),
+    clearErrors: jest.fn(),
+    nextStep: jest.fn()
+  };
+
+  // Set up default mocks before each test
+  beforeEach(() => {
+    useRaffle.mockReturnValue({
+      state: { ...mockState },
+      actions: mockActions
+    });
+    
+    // Clear mock calls between tests
+    jest.clearAllMocks();
+  });
+
+  test('renders all form fields correctly', () => {
+    render(<ParticipantForm />);
+
+    // Check if form title and description are rendered
+    expect(screen.getByText('Your Information')).toBeInTheDocument();
+    expect(screen.getByText(/Please provide your details/i)).toBeInTheDocument();
+
+    // Check if all input fields are rendered
+    expect(screen.getByLabelText(/First Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Last Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Email Address/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Company/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Job Title/i)).toBeInTheDocument();
+
+    // Check if interest options are rendered
+    expect(screen.getByText('Professional Interests')).toBeInTheDocument();
+    interestOptions.forEach(interest => {
+      expect(screen.getByLabelText(interest.label)).toBeInTheDocument();
+    });
+
+    // Check if submit button is rendered
+    expect(screen.getByRole('button', { name: /Continue to Prize Selection/i })).toBeInTheDocument();
+  });
+
+  test('displays validation errors for empty fields on submit', async () => {
+    // Mock setErrors to simulate validation failure
+    mockActions.setErrors.mockImplementation((errors) => {
+      useRaffle.mockReturnValue({
+        state: {
+          ...mockState,
+          errors
+        },
+        actions: mockActions
+      });
+    });
+
+    render(<ParticipantForm />);
+    
+    // Submit the form without filling any fields
+    fireEvent.click(screen.getByRole('button', { name: /Continue to Prize Selection/i }));
+    
+    // Check if validation errors are displayed
+    await waitFor(() => {
+      expect(mockActions.setErrors).toHaveBeenCalled();
+      expect(screen.getByText(/First name must be at least 2 characters/i)).toBeInTheDocument();
+      expect(screen.getByText(/Last name must be at least 2 characters/i)).toBeInTheDocument();
+      expect(screen.getByText(/Please enter a valid email address/i)).toBeInTheDocument();
+      expect(screen.getByText(/Company name must be at least 2 characters/i)).toBeInTheDocument();
+      expect(screen.getByText(/Job title must be at least 2 characters/i)).toBeInTheDocument();
+      expect(screen.getByText(/Please select at least one interest/i)).toBeInTheDocument();
+    });
+    
+    // Verify that nextStep was not called
+    expect(mockActions.nextStep).not.toHaveBeenCalled();
+  });
+
+  test('handles input field changes correctly', async () => {
+    render(<ParticipantForm />);
+    
+    // Interact with text fields
+    const firstNameInput = screen.getByLabelText(/First Name/i);
+    await userEvent.type(firstNameInput, 'John');
+    
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    await userEvent.type(emailInput, 'john@example.com');
+    
+    // Check if updateParticipantData was called with correct values
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'J' });
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'o' });
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'h' });
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ firstName: 'n' });
+    
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ email: 'j' });
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ email: 'o' });
+    // (and so on for each character)
+    
+    // Verify that clearErrors was called due to input changes
+    expect(mockActions.clearErrors).toHaveBeenCalled();
+  });
+
+  test('handles checkbox selection correctly', () => {
+    render(<ParticipantForm />);
+    
+    // Select an interest checkbox
+    const aiCheckbox = screen.getByLabelText('Artificial Intelligence');
+    fireEvent.click(aiCheckbox);
+    
+    // Check if updateParticipantData was called with the correct interest array
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
+      interests: ['ai'] 
+    });
+    
+    // Select another interest
+    const mlCheckbox = screen.getByLabelText('Machine Learning');
+    fireEvent.click(mlCheckbox);
+    
+    // The mock will have set the new state, so let's update our mock to simulate this
+    useRaffle.mockReturnValue({
+      state: {
+        ...mockState,
+        participantData: {
+          ...mockState.participantData,
+          interests: ['ai', 'ml']
+        }
+      },
+      actions: mockActions
+    });
+    
+    // Now uncheck the first checkbox
+    fireEvent.click(aiCheckbox);
+    
+    // Check if updateParticipantData was called with the updated interests array
+    expect(mockActions.updateParticipantData).toHaveBeenCalledWith({ 
+      interests: [] 
+    });
+  });
+
+  test('submits form successfully with valid data', () => {
+    // Set up the mock with valid data
+    useRaffle.mockReturnValue({
+      state: {
+        participantData: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.doe@example.com',
+          company: 'Acme Inc.',
+          title: 'Developer',
+          interests: ['ai', 'dev']
+        },
+        errors: {}
+      },
+      actions: mockActions
+    });
+    
+    render(<ParticipantForm />);
+    
+    // Submit the form
+    fireEvent.click(screen.getByRole('button', { name: /Continue to Prize Selection/i }));
+    
+    // Verify that nextStep was called
+    expect(mockActions.nextStep).toHaveBeenCalledTimes(1);
+    
+    // Verify that setErrors was not called (since data is valid)
+    expect(mockActions.setErrors).not.toHaveBeenCalled();
+  });
+  
+  test('clears validation errors when inputs change', () => {
+    // Set up mock with some existing errors
+    useRaffle.mockReturnValue({
+      state: {
+        ...mockState,
+        errors: {
+          firstName: 'First name must be at least 2 characters',
+          email: 'Please enter a valid email address'
+        }
+      },
+      actions: mockActions
+    });
+    
+    render(<ParticipantForm />);
+    
+    // Check that errors are initially displayed
+    expect(screen.getByText('First name must be at least 2 characters')).toBeInTheDocument();
+    expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
+    
+    // Make a change to an input
+    const firstNameInput = screen.getByLabelText(/First Name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'Jo' } });
+    
+    // Verify clearErrors was called
+    expect(mockActions.clearErrors).toHaveBeenCalledTimes(1);
+  });
+
+  test('error class is applied to inputs with errors', () => {
+    // Set up mock with some errors
+    useRaffle.mockReturnValue({
+      state: {
+        ...mockState,
+        errors: {
+          firstName: 'First name must be at least 2 characters',
+          email: 'Please enter a valid email address'
+        }
+      },
+      actions: mockActions
+    });
+    
+    render(<ParticipantForm />);
+    
+    // Check if error class is applied to inputs with errors
+    const firstNameInput = screen.getByLabelText(/First Name/i);
+    const emailInput = screen.getByLabelText(/Email Address/i);
+    const lastNameInput = screen.getByLabelText(/Last Name/i);
+    
+    expect(firstNameInput).toHaveClass('error');
+    expect(emailInput).toHaveClass('error');
+    expect(lastNameInput).not.toHaveClass('error');
+  });
+});

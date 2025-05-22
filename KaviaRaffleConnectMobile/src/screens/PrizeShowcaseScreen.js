@@ -6,7 +6,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import { globalStyles, colors, spacing, shadows } from '../styles';
 
@@ -35,18 +34,24 @@ const prizes = [
  * PrizeShowcaseScreen - Screen for displaying available raffle prizes
  * Shows two prizes in an attractive layout with details and a Continue button
  * 
+ * @param {object} props - Component props
+ * @param {object} props.navigation - React Navigation object for screen transitions
+ * @param {object} props.route - React Navigation route object containing params
+ * @param {object} props.route.params - Parameters passed from previous screen
+ * @param {object} props.route.params.userData - User data from the participant form
  * @returns {JSX.Element} React component
  */
-const PrizeShowcaseScreen = () => {
+const PrizeShowcaseScreen = ({ navigation, route }) => {
+  // Get user data from route params
+  const { userData } = route.params;
+
   // Handle continue button press
   const handleContinue = () => {
-    // For now, just show an alert
-    // This can be replaced with navigation logic later
-    Alert.alert(
-      "Continue",
-      "Proceeding to the next step...",
-      [{ text: "OK" }]
-    );
+    // Navigate to the Submission screen with user data and prizes
+    navigation.navigate('Submission', { 
+      userData,
+      prizes
+    });
   };
 
   // Render an individual prize card

@@ -229,7 +229,7 @@ describe('ParticipantForm Component', () => {
     render(<ParticipantForm />);
     
     // Submit the form
-    fireEvent.click(screen.getByRole('button', { name: /Continue to Prize Selection/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Continue to View Prizes/i }));
     
     // Verify that nextStep was called
     expect(mockActions.nextStep).toHaveBeenCalledTimes(1);

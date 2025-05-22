@@ -1,0 +1,220 @@
+.success-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 0;
+  position: relative;
+  min-height: 70vh;
+  overflow: hidden;
+  text-align: center;
+}
+
+.success-content {
+  animation: zoomInFade 0.5s ease-out;
+  position: relative;
+  z-index: 2;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--kavia-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 20px rgba(232, 122, 65, 0.5);
+}
+
+.checkmark {
+  color: white;
+  font-size: 2.5rem;
+}
+
+.success-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.success-message {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.selected-prize-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+  display: inline-block;
+  min-width: 250px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.prize-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.prize-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.prize-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+}
+
+.prize-value {
+  color: var(--kavia-orange);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.confirmation-details {
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+.confirmation-details p {
+  margin: 0.5rem 0;
+}
+
+.announcement-date {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.social-share {
+  margin-bottom: 2rem;
+}
+
+.social-share p {
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.social-icon {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.twitter {
+  background-color: #1DA1F2;
+  color: white;
+}
+
+.linkedin {
+  background-color: #0077B5;
+  color: white;
+}
+
+.facebook {
+  background-color: #3b5998;
+  color: white;
+}
+
+.social-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.restart-btn {
+  margin-bottom: 1rem;
+}
+
+.contact-support {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.support-link {
+  color: var(--kavia-orange);
+  text-decoration: none;
+}
+
+.support-link:hover {
+  text-decoration: underline;
+}
+
+/* Confetti animation */
+.confetti {
+  position: absolute;
+  top: -10px;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes zoomInFade {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  .success-title {
+    font-size: 2rem;
+  }
+  
+  .selected-prize-card {
+    width: 100%;
+  }
+  
+  .social-buttons {
+    flex-direction: column;
+  }
+  
+  .social-btn {
+    width: 100%;
+  }
+}

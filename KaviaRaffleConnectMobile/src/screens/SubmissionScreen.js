@@ -168,18 +168,18 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     color: colors.textSecondary,
-    fontSize: typography.fontSize.body,
+    fontSize: 14,
   },
   infoValue: {
     color: colors.textColor,
-    fontSize: typography.fontSize.body,
-    fontWeight: typography.fontWeight.medium,
+    fontSize: 14,
+    fontWeight: '500',
   },
   prizesContainer: {
     marginTop: spacing.medium,
   },
   prizesDescription: {
-    fontSize: typography.fontSize.body,
+    fontSize: 14,
     color: colors.textSecondary,
     marginBottom: spacing.medium,
   },

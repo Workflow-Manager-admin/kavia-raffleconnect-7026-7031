@@ -5,6 +5,5 @@
  * that can be reused across the application
  */
 
-// Example:
-// export { colors, spacing, typography } from './theme';
-// export { default as globalStyles } from './globalStyles';
+export { colors, spacing, typography, shadows } from './theme';
+export { default as globalStyles } from './globalStyles';

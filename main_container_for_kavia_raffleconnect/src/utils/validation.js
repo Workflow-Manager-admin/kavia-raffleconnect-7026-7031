@@ -49,8 +49,8 @@ export function validateParticipantData(data) {
     errors.company = 'Company name must be at least 2 characters';
   }
   
-  if (!hasMinLength(data.title, 2)) {
-    errors.title = 'Job title must be at least 2 characters';
+  if (!data.title) {
+    errors.title = 'Please select a job title';
   }
   
   if (!data.interests || data.interests.length === 0) {

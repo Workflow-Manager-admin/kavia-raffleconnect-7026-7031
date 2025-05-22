@@ -127,15 +127,20 @@ const ParticipantForm = () => {
           
           <div className="form-group">
             <label htmlFor="title">Job Title</label>
-            <input
-              type="text"
+            <select
               id="title"
               name="title"
               value={participantData.title}
               onChange={handleInputChange}
               className={errors.title ? 'error' : ''}
-              placeholder="Your role"
-            />
+            >
+              <option value="" disabled>Select your job title</option>
+              {jobTitleOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             {errors.title && <div className="error-message">{errors.title}</div>}
           </div>
         </div>
